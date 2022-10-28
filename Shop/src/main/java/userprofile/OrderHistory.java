@@ -206,6 +206,7 @@ public class OrderHistory {
         private static By commentField = By.xpath("//textarea[@name='msgText']");
         private static By sendButton = By.xpath("//button[@name='submitMessage']");
         private static By successMessage = By.xpath("//p[@class='alert alert-success']");
+        private static By errorMessage = By.xpath("//div[@class='alert alert-danger']//li");
         private static By commentList = By.xpath("//*[@id=\"block-order-detail\"]/div[5]//tbody/tr");
 
         //метод ожидает пока станет видимой информация о товаре
@@ -258,8 +259,12 @@ public class OrderHistory {
             driver.findElement(sendButton).click();
         }
 
-        public static String getSuccessMessage() {
-            return driver.findElement(successMessage).getText();
+        public static String getMessage() {
+            try {
+                return driver.findElement(successMessage).getText();
+            } catch (NoSuchElementException e) {
+                return driver.findElement(errorMessage).getText();
+            }
         }
 
         public static int getCountComment() {

@@ -145,13 +145,31 @@ public class OrderHistoryPageTest {
         OrderHistory.OrderInfo.pressSendButton();
         int countCommentAfter = OrderHistory.OrderInfo.getCountComment();
 
-        Assertions.assertEquals("Message successfully sent", OrderHistory.OrderInfo.getSuccessMessage());
+        Assertions.assertEquals("Message successfully sent", OrderHistory.OrderInfo.getMessage());
         Assertions.assertTrue(countCommentBefore < countCommentAfter);
     }
 
     @Test
     public void case11() {
+        //обновить страницу чтобы выполнить предусловие кейса (подробная инфомация о заказе скрыта)
+        driver.navigate().refresh();
 
+        OrderHistory.OrderHistoryTable.pressRandomOrderReferenceAndGetName();
+        OrderHistory.OrderInfo.pressSendButton();
+
+        Assertions.assertEquals("The message cannot be blank.", OrderHistory.OrderInfo.getMessage());
+    }
+
+    @Test
+    public void case12() {
+        //обновить страницу чтобы выполнить предусловие кейса (подробная инфомация о заказе скрыта)
+        driver.navigate().refresh();
+
+        OrderHistory.OrderHistoryTable.pressRandomOrderReferenceAndGetName();
+        OrderHistory.OrderInfo.typeInCommentField("   ");
+        OrderHistory.OrderInfo.pressSendButton();
+
+        Assertions.assertEquals("The message cannot be blank.", OrderHistory.OrderInfo.getMessage());
     }
 
     @AfterAll

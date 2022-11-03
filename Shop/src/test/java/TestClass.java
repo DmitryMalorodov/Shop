@@ -1,25 +1,17 @@
 import cart.CartPage;
 import contactus.ContactUsPage;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import resources.Resources;
 import signinpages.RegForm;
 import signinpages.SignInPage;
 import mainpage.MainPage;
-import userprofile.OrderHistory;
+import userprofile.MyAddresses;
 import userprofile.UserProfile;
 import userprofile.WishList;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.math.BigInteger;
-import java.net.URL;
 import java.time.Duration;
-import java.util.List;
 
 public class TestClass {
     public static void main(String[] args) throws InterruptedException {
@@ -35,6 +27,7 @@ public class TestClass {
         UserProfile userProfile = new UserProfile(driver);
         WishList wishList = new WishList(driver);
         ContactUsPage contactUsPage = new ContactUsPage(driver);
+        MyAddresses myAddresses = new MyAddresses(driver);
 
         CartPage cartPage = new CartPage(driver, wait);
         CartPage.Summary summary = cartPage.new Summary();
@@ -42,9 +35,14 @@ public class TestClass {
         CartPage.Shipping shipping = cartPage.new Shipping();
         CartPage.Payment payment = cartPage.new Payment();
 
-        driver.get("http://automationpractice.com");
-        mainPage.pressContactUsButton();
-        contactUsPage.uploadFile("C:\\Users\\user\\Desktop\\Test-Suits\\Тест-Сьют - Тестирование формы регистрации.rtf");
+        driver.get(Resources.mainPageUrl);
+        mainPage.pressSignInButton();
+        signInPage.typeInEmailAutField(Resources.correctEmail);
+        signInPage.typeInPasswordField(Resources.correctPassword);
+        signInPage.pressSignInButton();
+        userProfile.pressWishListLink();
+
+        System.out.println(wishList.getQuantityGoods());
     }
 
 //    public static boolean chooseRandomPhotoAndCompare() {

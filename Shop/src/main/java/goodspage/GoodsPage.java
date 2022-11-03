@@ -35,6 +35,7 @@ public class GoodsPage {
     private By sizeList = By.id("group_1");
     private By colorList = By.xpath("//ul[@id='color_to_pick_list']//a");
     private By addToWishlistButton = By.id("wishlist_button");
+    private By closeInfoPopUp = By.xpath("//a[@title='Close']");
     private By writeReviewButton = By.xpath("//a[@class='open-comment-form']");
     private By sendToFriendButton = By.id("send_friend_button");
     private By infoMessage = By.xpath("//p[@class='fancybox-error']");
@@ -115,8 +116,11 @@ public class GoodsPage {
         return driver.findElements(colorList).size();
     }
 
+    //метод нажимает на кнопку добавить в список желаний и закрывает появляющийся информационный попап
     public void pressAddToWishlistButton() {
         driver.findElement(addToWishlistButton).click();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(closeInfoPopUp));
+        driver.findElement(closeInfoPopUp).click();
     }
 
     public String getInfoMessageAndClose() {

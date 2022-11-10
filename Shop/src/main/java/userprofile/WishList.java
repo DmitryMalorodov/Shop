@@ -10,7 +10,10 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.util.Date;
 import java.util.List;
 
 public class WishList {
@@ -29,12 +32,13 @@ public class WishList {
     private By listOfWishLists = By.xpath("//table[@class='table table-bordered']/tbody/tr");
     private By nameLink = By.xpath("//td[@style='width:200px;']/a");
     private By quantityGoods = By.xpath("//td[@class='bold align_center']");
-    private By dateCreatedList = By.xpath("//table[@class='table table-bordered']//td[4]");
     private By viewLink = By.xpath("//table[@class='table table-bordered']//td[5]/a");
     private By deleteWishListButton = By.xpath("//td[@class='wishlist_delete']/a");
+    private By dateCreatedList = By.xpath("//table[@class='table table-bordered']//td[4]");
 
     //элементы информации о товаре
     private By infoWindow = By.xpath("//div[@class='wishlistLinkTop']");
+    private By closeInfoWindowButton = By.id("hideSendWishlist");
     private By photoOfGoods = By.xpath("//div[@class='product_image']");
     private By sizeAndColorLink = By.xpath("//p[@id='s_title']//a");
     private By deleteGoodsButton = By.xpath("//a[@title='Delete']");
@@ -73,7 +77,7 @@ public class WishList {
                 MainPage.waiting(3000);
             }
         }
-        //проверяем количество товаров, если не равно 1, то вписываем в поле 1
+        //проверяем количество товаров, если не равно 1, то вписываем в поле значение 1 и сохраняем
         if (!getQuantityGoods().equals("1")) {
             driver.navigate().refresh();
             pressNameLink();
@@ -120,6 +124,12 @@ public class WishList {
         return driver.findElement(dateCreatedList).getText().trim();
     }
 
+    public boolean isCorrectDateCreatedList() {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        String currentDate = formatter.format(new Date());
+        return currentDate.equals(getDateCreatedList());
+    }
+
     public void pressViewLink() {
         driver.findElement(viewLink).click();
     }
@@ -134,6 +144,18 @@ public class WishList {
 
     public void dismissAlert() {
         driver.switchTo().alert().dismiss();
+    }
+
+    public boolean isInfoWindowShowed() {
+        try {
+            return driver.findElement(infoWindow).isDisplayed();
+        } catch (NoSuchElementException e) {
+            return false;
+        }
+    }
+
+    public void pressCloseInfoWindowButton() {
+        driver.findElement(closeInfoWindowButton).click();
     }
 
     //возвращает количество карточек товаров
